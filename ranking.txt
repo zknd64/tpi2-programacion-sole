@@ -1,0 +1,4 @@
+Emi,60
+Pol,80
+EMILIA,100
+Jugador Anónimo,0
