@@ -1,9 +1,7 @@
 import random
 import os
 
-# =====================================================================
 # JUEGO 1: EL JUEGO DE FRUTAS
-# =====================================================================
 
 def adivinar_resultado():
     nombre = input("Ingrese su nombre y apellido: ")
@@ -93,9 +91,7 @@ def mostrar_menu_juego_frutas():
             print("Opción no valida ❌.")
 
 
-# =====================================================================
 # JUEGO 2: COMPLETA LA SECUENCIA
-# =====================================================================
 
 def guardar_puntaje_secuencia(nombre, puntos):
     """Guarda el nombre y puntaje al final del archivo."""
@@ -176,9 +172,7 @@ def mostrar_menu_secuencia():
             print("Opción inválida. Por favor, elegí 1, 2 o 3.")
 
 
-# =====================================================================
 # JUEGO 3: AVENTURA DE MULTIPLICACIONES
-# =====================================================================
 
 def guardar_puntaje_multiplicar(archivo_ranking: str, nombre: str, puntaje: int) -> None:
     """Registra de manera persistente el nombre y puntaje en el archivo."""
@@ -308,9 +302,7 @@ def mostrar_menu_multiplicar():
             print("❌ Opción inválida. Elige un número del 1 al 5.")
 
 
-# =====================================================================
 # JUEGO 4: PALABRA OCULTA
-# =====================================================================
 
 palabras = {
     "Animales": [
@@ -472,9 +464,7 @@ def menu_oculta():
             print("Invalido")
 
 
-# =====================================================================
 # PROGRAMA PRINCIPAL: MENÚ GENERAL DEL PROYECTO
-# =====================================================================
 
 def menu_general():
     opcion_general = 0
@@ -509,231 +499,4 @@ def menu_general():
             print("Por favor, ingresa un número válido de opción ❌.")
 
 # Arranca todo el programa integrado con los 4 juegos
-menu_general()import random
-<<<<<<< HEAD
-import os
-
-# --- FUNCIONES DE PERSISTENCIA (ARCHIVOS) ---
-
-def guardar_puntaje_multiplicar(archivo_ranking: str, nombre: str, puntaje: int) -> None:
-    """Registra de manera persistente el nombre y puntaje en el archivo."""
-    try:
-        with open(archivo_ranking, "a", encoding="utf-8") as archivo:
-            archivo.write(f"{nombre},{puntaje}\n")
-    except IOError:
-        print("Error: No se pudo guardar el puntaje en el archivo.")
-
-def mostrar_ranking_multiplicar(archivo_ranking: str) -> None:
-    """Lee el archivo, ordena los puntajes de mayor a menor y los muestra."""
-    print("\n--- 🏆 TABLA DE PUNTAJES (RANKING) 🏆 ---")
-    if not os.path.exists(archivo_ranking):
-        print("Aún no hay puntajes registrados. ¡Sé el primero!")
-        return
-
-    lista_ranking = []
-    try:
-        with open(archivo_ranking, "r", encoding="utf-8") as archivo:
-            for linea in archivo:
-                linea = linea.strip()
-                if linea:
-                    nombre, puntaje_str = linea.split(",")
-                    lista_ranking.append((nombre, int(puntaje_str)))
-        
-        lista_ranking.sort(key=lambda x: x[1], reverse=True)
-        
-        for puesto, (nombre, puntaje) in enumerate(lista_ranking[:5], start=1):
-            print(f"{puesto}. {nombre}: {puntaje} puntos")
-    except (IOError, ValueError):
-        print("Error al leer el archivo de ranking.")
-
-def solicitar_entero(mensaje: str) -> int:
-    """Valida la entrada del usuario de forma robusta ante errores de tipo."""
-    while True:
-        try:
-            return int(input(mensaje))
-        except ValueError:
-            print("❌ Entrada inválida. Por favor, escribe un número entero.")
-
-def seccion_juego(archivo_ranking: str) -> None:
-    """Ciclo repetitivo de 5 preguntas de multiplicación aleatorias."""
-    print("\n--- 🎮 ¡A JUGAR Y MULTIPLICAR! 🎮 ---")
-    nombre = input("Escribe tu nombre: ").strip()
-    if not nombre:
-        nombre = "Jugador Anónimo"
-
-    puntaje_total = 0
-    total_preguntas = 5
-
-    for i in range(1, total_preguntas + 1):
-        num1 = random.randint(2, 10)
-        num2 = random.randint(2, 10)
-        resultado_correcto = num1 * num2
-
-        print(f"\nPregunta {i}/{total_preguntas}: ¿Cuánto es {num1} x {num2}?")
-        respuesta_usuario = solicitar_entero("Tu respuesta: ")
-
-        if respuesta_usuario == resultado_correcto:
-            print("🌟 ¡Excelente! Respuesta correcta. (+20 puntos)")
-            puntaje_total += 20
-        else:
-            print(f"😢 ¡Casi! El resultado correcto era {resultado_correcto}.")
-
-    print(f"\n🎉 ¡Terminaste, {nombre}! Tu puntaje final es: {puntaje_total} puntos.")
-    guardar_puntaje_multiplicar(archivo_ranking, nombre, puntaje_total)
-
-def seccion_aprender_tablas() -> None:
-    """Muestra de forma secuencial y repetitiva la tabla que el niño elija."""
-    print("\n--- 📖 APRENDE LAS TABLAS DE MULTIPLICAR 📖 ---")
-    print("¿Qué tabla te gustaría repasar? (Ingresa un número del 1 al 10)")
-    tabla = solicitar_entero("Tabla del: ")
-    
-    print(f"\n--- Tabla del {tabla} ---")
-    for i in range(1, 11):
-        print(f"👉 {tabla} x {i} = {tabla * i}")
-    input("\nPresiona Enter para volver al menú...")
-
-def seccion_calculo_mental() -> None:
-    """Estructura de datos: Diccionario para enseñar trucos de cálculo mental."""
-    trucos = {
-        2: "Multiplicar por 2 es simplemente buscar el DOBLE del número. (Ej: 2 x 6 es 6 + 6 = 12).",
-        5: "Los resultados de la tabla del 5 siempre terminan en 0 o en 5. ¡Prueba saltando de 5 en 5!",
-        9: "¡El truco de las manos! Si multiplicas 9 x 3, dobla tu tercer dedo. A la izquierda te quedan 2 y a la derecha 7: ¡27!",
-        10: "Para multiplicar por 10, solo escribe el mismo número y agrégale un CERO al final. (Ej: 10 x 4 = 40)."
-    }
-
-    print("\n--- 🧠 TRUCOS DE CÁLULCO MENTAL 🧠 ---")
-    print("Elige un número para aprender su secreto de cálculo rápido: (2, 5, 9, 10)")
-    opcion = solicitar_entero("Tu opción: ")
-
-    if opcion in trucos:
-        print(f"\n💡 Secreto del {opcion}: {trucos[opcion]}")
-    else:
-        print("\nPronto añadiremos más trucos para ese número. ¡Sigue practicando!")
-    input("\nPresiona Enter para volver al menú...")
-
-def mostrar_menu_multiplicar():
-    """Controla el flujo principal del software educativo."""
-    ARCHIVO_DATOS = "ranking_multiplicar.txt"
-    
-    while True:
-        print("\n======================================")
-        print("    🎈 AVENTURA DE MULTIPLICACIONES 🎈  ")
-        print("======================================")
-        print("1. 🎮 Jugar (Desafío Aleatorio)")
-        print("2. 📖 Estudiar las Tablas")
-        print("3. 🧠 Trucos de Cálculo Mental")
-        print("4. 🏆 Ver Tabla de Puntajes")
-        print("5. 🚪 Volver al Menú Principal 🔙")
-        print("======================================")
-        
-        opcion = solicitar_entero("Selecciona una opción (1-5): ")
-
-        if opcion == 1:
-            seccion_juego(ARCHIVO_DATOS)
-        elif opcion == 2:
-            seccion_aprender_tablas()
-        elif opcion == 3:
-            seccion_calculo_mental()
-        elif opcion == 4:
-            mostrar_ranking_multiplicar(ARCHIVO_DATOS)
-        elif opcion == 5:
-            print("\nSaliendo del juego de Multiplicaciones...")
-            break
-        else:
-            print("❌ Opción inválida. Elige un número del 1 al 5.")
-mostrar_menu_multiplicar()
-
-
-
-=======
-
-def jugar():
-    nombre = input("Ingrese su nombre: ")
-    puntaje = 0
-
-    frutas = {"Manzana": 10,"Pera": 5,"Uva": 8, "Banana": 4, "kiwi": 2}
-
-    nombres_frutas = list(frutas.keys())
-
-    for ronda in range(1, 6):
-
-        fruta1 = random.choice(nombres_frutas)
-        fruta2 = random.choice(nombres_frutas)
-        fruta3 = random.choice(nombres_frutas)
-        fruta4 = random.choice(nombres_frutas)
-        fruta5 = random.choice(nombres_frutas)
-        
-
-        resultado = (
-            frutas[fruta1]
-            + frutas[fruta2]
-            + frutas[fruta3]
-            + frutas[fruta4]
-            + frutas[fruta5]
-        )
-
-        print("\nRonda", ronda)
-        print(fruta1, "+", fruta2, "+", fruta3, "+", fruta4, "+", fruta5, "= ?")
-
-        respuesta = int(input("Ingrese el resultado: "))
-
-        if respuesta == resultado:
-            print("¡Correcto!")
-            puntaje += 1
-        else:
-            print("Incorrecto.")
-            print("La respuesta correcta era:", resultado)
-
-    print("\nJuego terminado.")
-    print("Puntaje obtenido:", puntaje)
-
-    guardar_puntaje(nombre, puntaje)
-
-def guardar_puntaje(nombre, puntaje):
-    archivo = open("puntajes.txt", "a")
-    archivo.write(nombre + ";" + str(puntaje) + "\n")
-    archivo.close()
-def mostrar_ranking():
-    try:
-        archivo = open("puntajes.txt", "r")
-
-        print("\n=== RANKING ===")
-
-        for linea in archivo:
-            datos = linea.strip().split(";")
-            nombre = datos[0]
-            puntos = int(datos[1])
-
-            print(nombre, "-", puntos, "puntos")
-
-        archivo.close()
-
-    except FileNotFoundError:
-        print("No hay puntajes guardados todavía.")
-
-def mostrar_menu():
-    opcion = 0
-
-    while opcion != 3:
-
-        print("\n=== JUEGO DE FRUTAS ===")
-        print("1. Jugar")
-        print("2. Ver ranking")
-        print("3. Salir")
-
-        opcion = int(input("Seleccione una opción: "))
-
-        if opcion == 1:
-            jugar()
-
-        elif opcion == 2:
-            mostrar_ranking()
-
-        elif opcion == 3:
-            print("Gracias por jugar.")
-
-        else:
-            print("Opción inválida.")
-# Programa principal
-mostrar_menu()
->>>>>>> origin/master
+menu_general()
